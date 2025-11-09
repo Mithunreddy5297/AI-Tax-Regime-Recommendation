@@ -1,0 +1,81 @@
+{
+  "sections": {
+    "80C": {
+      "title": "Section 80C - Deduction for investments",
+      "description": "Deduction up to ₹1,50,000 for investments in specified instruments",
+      "eligible_investments": [
+        "ELSS (Equity Linked Savings Scheme)",
+        "PPF (Public Provident Fund)",
+        "NSC (National Savings Certificate)",
+        "Tax-saving Fixed Deposits",
+        "Life Insurance Premium",
+        "Principal repayment of home loan",
+        "Sukanya Samriddhi Yojana",
+        "Senior Citizens Savings Scheme"
+      ],
+      "max_limit": 150000,
+      "legal_reference": "Income Tax Act, 1961 - Section 80C"
+    },
+    "80D": {
+      "title": "Section 80D - Health Insurance Premium",
+      "description": "Deduction for health insurance premium paid",
+      "limits": {
+        "self_family": 25000,
+        "senior_citizen": 50000,
+        "parents": 25000,
+        "senior_citizen_parents": 50000
+      },
+      "legal_reference": "Income Tax Act, 1961 - Section 80D"
+    },
+    "80CCD_1B": {
+      "title": "Section 80CCD(1B) - Additional NPS Contribution",
+      "description": "Additional deduction of up to ₹50,000 for NPS contribution (over and above Section 80C)",
+      "max_limit": 50000,
+      "legal_reference": "Income Tax Act, 1961 - Section 80CCD(1B)"
+    },
+    "HRA": {
+      "title": "Section 10(13A) - House Rent Allowance",
+      "description": "Exemption for House Rent Allowance",
+      "calculation": "Minimum of: (1) Actual HRA received, (2) Actual rent paid - 10% of basic salary, (3) 50% of basic (metro) or 40% (non-metro)",
+      "requirements": [
+        "Valid rent receipts",
+        "Rental agreement",
+        "PAN of landlord (if rent > ₹1,00,000 per annum)"
+      ],
+      "legal_reference": "Income Tax Act, 1961 - Section 10(13A)"
+    }
+  },
+  "regimes": {
+    "old": {
+      "description": "Old Tax Regime with deductions",
+      "slabs": [
+        {"min": 0, "max": 250000, "rate": 0},
+        {"min": 250000, "max": 500000, "rate": 0.05},
+        {"min": 500000, "max": 1000000, "rate": 0.20},
+        {"min": 1000000, "max": null, "rate": 0.30}
+      ],
+      "deductions_allowed": true
+    },
+    "new": {
+      "description": "New Tax Regime with lower rates",
+      "slabs": [
+        {"min": 0, "max": 300000, "rate": 0},
+        {"min": 300000, "max": 700000, "rate": 0.05},
+        {"min": 700000, "max": 1000000, "rate": 0.10},
+        {"min": 1000000, "max": 1200000, "rate": 0.15},
+        {"min": 1200000, "max": 1500000, "rate": 0.20},
+        {"min": 1500000, "max": null, "rate": 0.30}
+      ],
+      "deductions_allowed": false,
+      "standard_deduction": 50000
+    }
+  },
+  "tips": [
+    "Maximize Section 80C investments before March 31st",
+    "Health insurance premium should be paid before the financial year ends",
+    "Keep proper documentation for all deductions",
+    "Review your regime choice annually based on your deductions",
+    "NPS contribution under 80CCD(1B) is in addition to 80C limit"
+  ]
+}
+
