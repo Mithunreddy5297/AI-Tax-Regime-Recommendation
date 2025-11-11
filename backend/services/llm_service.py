@@ -1,12 +1,22 @@
 import os
-from typing import Dict, List, Optional
+from typing import Dict, List, Optional, TYPE_CHECKING
 import logging
 import json
+import importlib
+
+# Try dynamic import to avoid static analyzer errors if package is not installed
+genai = None
+GEMINI_AVAILABLE = False
+
+if TYPE_CHECKING:
+    # Allow type checkers to recognize the module during static analysis
+    import google.generativeai as genai  # type: ignore
 
 try:
-    import google.generativeai as genai
+    genai = importlib.import_module("google.generativeai")
     GEMINI_AVAILABLE = True
-except ImportError:
+except Exception:
+    genai = None
     GEMINI_AVAILABLE = False
 
 logging.basicConfig(level=logging.INFO)
