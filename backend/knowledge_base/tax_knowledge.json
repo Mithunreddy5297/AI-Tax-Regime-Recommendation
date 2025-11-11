@@ -216,6 +216,220 @@
     },
     "use": "Required for filing Income Tax Return (ITR)"
   },
+  "form16_employee_details": {
+    "title": "Employee Personal Information (Form 16)",
+    "description": "Personal details of the employee in Form 16",
+    "fields": [
+      "PAN (Permanent Account Number)",
+      "Name of employee",
+      "Date of birth",
+      "Gender",
+      "Residential status",
+      "Address (as per PAN/Aadhaar)"
+    ],
+    "importance": "Essential for ITR filing and matching with PAN records"
+  },
+  "form16_employer_details": {
+    "title": "Employer Information (Form 16)",
+    "description": "Details of the employer organization",
+    "fields": [
+      "Employer name",
+      "Employer PAN",
+      "Employer TAN (Tax Account Number)",
+      "Address of employer",
+      "Nature of business/profession",
+      "Status of employer (Govt/Private/PSU)"
+    ],
+    "importance": "Helps identify salary income source and verify TDS deductions"
+  },
+  "form16_financial_year": {
+    "title": "Financial Year Details (Form 16)",
+    "description": "Financial year for which Form 16 is issued",
+    "format": "April 1 to March 31",
+    "note": "Form 16 for FY 2024-25 is issued during FY 2024-25",
+    "periods": [
+      "FY 2024-25: April 1, 2024 to March 31, 2025",
+      "FY 2023-24: April 1, 2023 to March 31, 2024",
+      "FY 2022-23: April 1, 2022 to March 31, 2023"
+    ],
+    "importance": "Determines applicable tax slabs and deduction limits"
+  },
+  "form16_income_summary": {
+    "title": "Income Summary (Form 16)",
+    "description": "Summary of all income components",
+    "fields": [
+      "Gross salary",
+      "Standard deduction claimed",
+      "Deductions under Chapter VI-A (80 sections)",
+      "Net taxable salary",
+      "Income from other sources (if any)"
+    ],
+    "importance": "Base for calculating tax liability"
+  },
+  "form16_tax_details": {
+    "title": "Tax Calculation Details (Form 16)",
+    "description": "Tax liability and payments breakdown",
+    "fields": [
+      "Total income tax payable",
+      "Tax deducted at source (TDS) - monthly breakdown",
+      "Advance tax paid (if any)",
+      "Interest under Section 234A (late payment)",
+      "Interest under Section 234B (installment default)",
+      "Interest under Section 234D (late advance tax)",
+      "Total tax liability"
+    ],
+    "importance": "Determines refund or additional tax payable"
+  },
+  "form16_surcharge_cess": {
+    "title": "Surcharge and Health & Education Cess",
+    "description": "Additional levies on income tax",
+    "surcharge": {
+      "applicability": "When income exceeds ₹50 Lakh",
+      "rates": {
+        "50_to_100_crore": "15%",
+        "100_crore_plus": "25%"
+      }
+    },
+    "health_education_cess": {
+      "rate": "4%",
+      "applicability": "On total income tax + surcharge",
+      "note": "Applicable to all individuals earning above certain thresholds"
+    },
+    "importance": "Increases effective tax rate significantly for high earners"
+  },
+  "form16_relief_rebate": {
+    "title": "Relief and Rebate Under Form 16",
+    "description": "Tax relief provisions applicable to salary income",
+    "rebate_87A": {
+      "description": "Rebate for individual residents",
+      "conditions": [
+        "Resident individual",
+        "Income from salary and other specified sources",
+        "Income up to ₹5 Lakh (may vary by year)"
+      ],
+      "benefit": "100% tax rebate if income is below threshold",
+      "legal_reference": "Income Tax Act, 1961 - Section 87A"
+    },
+    "rebate_87_other": {
+      "description": "Other rebates",
+      "applicable_to": [
+        "Relief for foreign tax credit",
+        "Relief for taxes paid in multiple jurisdictions"
+      ]
+    },
+    "relief_under_different_heads": {
+      "description": "Relief under different income heads",
+      "examples": [
+        "Relief under Section 90 (foreign residents)",
+        "Relief under Section 91 (foreign income)",
+        "Relief under Section 89 (arrears of salary)"
+      ]
+    },
+    "importance": "Can significantly reduce tax liability for eligible individuals"
+  },
+  "form16_tds_breakdown": {
+    "title": "Month-wise TDS Breakdown (Form 16 Part B)",
+    "description": "Detailed monthly TDS deductions",
+    "fields": [
+      "Month",
+      "Salary paid",
+      "Tax deducted at source (TDS)",
+      "Reason for variation (if any)"
+    ],
+    "importance": "Helps verify TDS accuracy and identify any discrepancies",
+    "note": "Form 16 Part B contains 12 rows for each month of financial year"
+  },
+  "form16_deductions_claimed": {
+    "title": "Deductions Claimed Summary (Form 16)",
+    "description": "Summary of all Section 80 deductions in Form 16",
+    "common_deductions": [
+      "80C - Investments (ELSS, PPF, NSC, Life Insurance, Home Loan Principal)",
+      "80CCD(1) - NPS Employee Contribution",
+      "80CCD(1B) - Additional NPS Contribution (beyond 80C)",
+      "80D - Health Insurance Premium",
+      "80E - Education Loan Interest",
+      "80G - Charitable Donations",
+      "80TTA - Savings Account Interest",
+      "80TTB - Senior Citizen Interest Income",
+      "24B - Home Loan Interest",
+      "80EE - First-time Homebuyer Deduction",
+      "80GG - Rent Deduction (without HRA)"
+    ],
+    "importance": "Form 16 shows all deductions claimed by employer; employee must provide supporting documents"
+  },
+  "form16_verification": {
+    "title": "Form 16 Verification Checklist",
+    "description": "Items to verify when receiving Form 16",
+    "checklist": [
+      "Employee details match PAN/Aadhaar",
+      "Employer details are correct",
+      "Financial year is correct",
+      "Gross salary matches salary slips",
+      "Standard deduction is correctly applied",
+      "Month-wise TDS matches salary slips",
+      "Total TDS matches across all months",
+      "Deductions claimed are accurate and supported by documents",
+      "Tax calculated is correct",
+      "Form is digitally signed by authorized person",
+      "No discrepancies between Part A and Part B"
+    ],
+    "action_if_error": "Report to employer for correction; request corrected Form 16 if needed"
+  },
+  "form16_document_retention": {
+    "title": "Form 16 Document Retention",
+    "description": "Recommended retention period for Form 16 and related documents",
+    "retention_period": "Minimum 6 years from the end of the financial year",
+    "why_retain": [
+      "Required for income tax audit",
+      "Supporting for any tax notice",
+      "Verification by authorities",
+      "Personal financial records"
+    ],
+    "supporting_documents": [
+      "Original Form 16",
+      "Salary slips for each month",
+      "TDS certificate (if any)",
+      "Bank statements",
+      "Investment proof documents",
+      "Insurance policy copies",
+      "Rental agreement and receipts",
+      "Loan documents and interest certificates",
+      "Medical expense bills"
+    ],
+    "importance": "Critical for compliance and audit trail"
+  },
+  "form16_common_errors": {
+    "title": "Common Form 16 Errors",
+    "description": "Frequent mistakes found in Form 16",
+    "errors": [
+      {
+        "error": "Incorrect PAN",
+        "consequence": "ITR rejection or delayed processing",
+        "remedy": "Get corrected Form 16 from employer"
+      },
+      {
+        "error": "TDS amount not matching actual deduction",
+        "consequence": "Incorrect refund/tax liability",
+        "remedy": "Request correction based on salary slips"
+      },
+      {
+        "error": "Deductions not claimed despite eligibility",
+        "consequence": "Higher tax liability",
+        "remedy": "Claim deductions in ITR even if not in Form 16 (with documents)"
+      },
+      {
+        "error": "Mismatch in gross salary",
+        "consequence": "Tax calculation errors",
+        "remedy": "Verify against salary slips; report discrepancy"
+      },
+      {
+        "error": "Incomplete employer details",
+        "consequence": "Cannot verify source of income",
+        "remedy": "Request complete details from employer"
+      }
+    ],
+    "importance": "Early detection and correction prevents ITR rejection"
+  },
   "tips": [
     "Form 16 contains all details needed for ITR filing",
     "Compare Old vs New regime using your Form 16 data",
