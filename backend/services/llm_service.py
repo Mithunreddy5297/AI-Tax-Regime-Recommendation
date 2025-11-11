@@ -1,8 +1,13 @@
 import os
 from typing import Dict, List, Optional
 import logging
-from openai import OpenAI
 import json
+
+try:
+    import google.generativeai as genai
+    GEMINI_AVAILABLE = True
+except ImportError:
+    GEMINI_AVAILABLE = False
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -11,33 +16,36 @@ logger = logging.getLogger(__name__)
 class LLMService:
     """
     LLM service for generating tax recommendations and explanations
-    Uses OpenAI API by default, can be configured for local models
+    Uses Google Gemini API by default, can be configured for other models
     """
     
     def __init__(self):
         """Initialize LLM service"""
-        self.api_key = os.getenv("OPENAI_API_KEY", "").strip()
-        self.model = os.getenv("OPENAI_MODEL", "gpt-3.5-turbo")
+        self.api_key = os.getenv("GEMINI_API_KEY", "").strip()
+        self.model = os.getenv("GEMINI_MODEL", "gemini-pro")
         
         # Check if API key is valid (not empty and not placeholder)
-        self.use_openai = bool(
+        self.use_gemini = bool(
             self.api_key and 
-            self.api_key != "your_openai_api_key_here" and
+            self.api_key != "your_gemini_api_key_here" and
             len(self.api_key) > 10 and
-            self.api_key.startswith("sk-")
+            GEMINI_AVAILABLE
         )
         
-        if self.use_openai:
+        if self.use_gemini:
             try:
-                self.client = OpenAI(api_key=self.api_key)
-                logger.info("OpenAI client initialized successfully")
+                genai.configure(api_key=self.api_key)
+                self.model_client = genai.GenerativeModel(self.model)
+                logger.info(f"Google Gemini client initialized successfully with model: {self.model}")
             except Exception as e:
-                logger.error(f"Failed to initialize OpenAI client: {str(e)}")
-                self.use_openai = False
-                self.client = None
+                logger.error(f"Failed to initialize Google Gemini client: {str(e)}")
+                self.use_gemini = False
+                self.model_client = None
         else:
-            logger.warning("OpenAI API key not found or invalid. Using rule-based recommendations.")
-            self.client = None
+            if not GEMINI_AVAILABLE:
+                logger.warning("google-generativeai package not installed. Install with: pip install google-generativeai")
+            logger.warning("Google Gemini API key not found or invalid. Using rule-based recommendations.")
+            self.model_client = None
     
     async def generate_recommendations(
         self,
@@ -58,7 +66,7 @@ class LLMService:
         Returns:
             Dictionary with recommendations, explanations, and legal references
         """
-        if not self.use_openai:
+        if not self.use_gemini:
             # Fallback to rule-based recommendations
             return self._generate_rule_based_recommendations(
                 extracted_data, old_regime_tax, new_regime_tax, deductions_analysis
@@ -73,28 +81,20 @@ class LLMService:
             # Generate prompt
             prompt = self._create_prompt(context)
             
-            # Call LLM
+            # Call Google Gemini API
             try:
-                response = self.client.chat.completions.create(
-                    model=self.model,
-                    messages=[
-                        {
-                            "role": "system",
-                            "content": self._get_system_prompt()
-                        },
-                        {
-                            "role": "user",
-                            "content": prompt
-                        }
-                    ],
-                    temperature=0.3,
-                    max_tokens=1500
+                response = self.model_client.generate_content(
+                    prompt,
+                    generation_config=genai.types.GenerationConfig(
+                        temperature=0.3,
+                        max_output_tokens=1500
+                    )
                 )
                 
                 # Parse response
-                llm_output = response.choices[0].message.content
+                llm_output = response.text
             except Exception as e:
-                logger.error(f"Error calling OpenAI API: {str(e)}")
+                logger.error(f"Error calling Google Gemini API: {str(e)}")
                 # Fallback to rule-based recommendations
                 return self._generate_rule_based_recommendations(
                     extracted_data, old_regime_tax, new_regime_tax, deductions_analysis
@@ -110,7 +110,7 @@ class LLMService:
             return parsed_response
             
         except Exception as e:
-            logger.error(f"Error generating LLM recommendations: {str(e)}")
+            logger.error(f"Error generating Gemini recommendations: {str(e)}")
             # Fallback to rule-based
             return self._generate_rule_based_recommendations(
                 extracted_data, old_regime_tax, new_regime_tax, deductions_analysis
