@@ -91,6 +91,15 @@
   margin-top: 0.25rem;
 }
 
+.advanced-toggle {
+  transition: all 0.3s;
+}
+
+.advanced-toggle:hover {
+  background-color: rgba(102, 126, 234, 0.1) !important;
+  border-color: #667eea !important;
+}
+
 .calculation-loading {
   text-align: center;
   padding: 2rem;

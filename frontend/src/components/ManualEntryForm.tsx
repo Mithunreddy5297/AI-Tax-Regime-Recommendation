@@ -30,6 +30,9 @@ const ManualEntryForm: React.FC = () => {
       rent_paid: '',
       is_metro: false,
       section_80g: '',
+      section_80e: '',
+      section_80ee: '',
+      section_80gg: '',
       other_deductions: ''
     }
   });
@@ -37,6 +40,7 @@ const ManualEntryForm: React.FC = () => {
   const [taxCalculation, setTaxCalculation] = useState<TaxCalculation | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [showAdvanced, setShowAdvanced] = useState(false);
 
   // Debounce function for real-time calculation
   const debounce = useCallback((func: Function, wait: number) => {
@@ -318,6 +322,73 @@ const ManualEntryForm: React.FC = () => {
               className="form-input"
             />
           </div>
+
+          {/* Advanced Deductions */}
+          <div className="form-group full-width">
+            <button
+              type="button"
+              className="advanced-toggle"
+              onClick={() => setShowAdvanced(!showAdvanced)}
+              style={{
+                background: 'none',
+                border: '1px solid #007bff',
+                color: '#007bff',
+                padding: '10px 15px',
+                borderRadius: '4px',
+                cursor: 'pointer',
+                fontSize: '0.95rem',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '10px'
+              }}
+            >
+              {showAdvanced ? '▼' : '▶'} Advanced Deductions (Optional)
+            </button>
+          </div>
+
+          {showAdvanced && (
+            <>
+              <div className="form-group full-width" style={{ marginTop: '15px', paddingTop: '15px', borderTop: '1px solid #ddd' }}>
+                <h3 style={{ color: '#555', marginBottom: '15px' }}>Advanced Deductions</h3>
+              </div>
+
+              <div className="form-group">
+                <label>Section 80E - Education Loan Interest</label>
+                <input
+                  type="number"
+                  value={formData.deductions.section_80e}
+                  onChange={(e) => handleInputChange('section_80e', e.target.value)}
+                  placeholder="e.g., 50000"
+                  className="form-input"
+                />
+                <span className="form-hint">No upper limit - entire interest paid</span>
+              </div>
+
+              <div className="form-group">
+                <label>Section 80EE - First-time Homebuyer</label>
+                <input
+                  type="number"
+                  value={formData.deductions.section_80ee}
+                  onChange={(e) => handleInputChange('section_80ee', e.target.value)}
+                  placeholder="e.g., 150000"
+                  className="form-input"
+                />
+                <span className="form-hint">Max: ₹1,50,000 (in addition to 24B)</span>
+              </div>
+
+              <div className="form-group">
+                <label>Section 80GG - Rent Deduction (Without HRA)</label>
+                <input
+                  type="number"
+                  value={formData.deductions.section_80gg}
+                  onChange={(e) => handleInputChange('section_80gg', e.target.value)}
+                  placeholder="e.g., 60000"
+                  className="form-input"
+                />
+                <span className="form-hint">Use only if NOT claiming HRA - Max: ₹5,000/month</span>
+              </div>
+            </>
+          )}
         </div>
       </div>
 
