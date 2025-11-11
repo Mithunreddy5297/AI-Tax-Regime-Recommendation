@@ -54,6 +54,23 @@ class TaxCalculator:
     # Health and Education Cess
     HEALTH_EDUCATION_CESS_RATE = 0.04  # 4% of income tax
     
+    # Form 16 Deduction Limits (FY 2023-24)
+    FORM16_DEDUCTION_LIMITS = {
+        "section_80c": 150000,        # Investments
+        "section_80ccd_1": 150000,    # NPS (part of 80C)
+        "section_80d": 25000,         # Health Insurance
+        "section_80d_senior": 50000,  # Health Insurance (Senior)
+        "section_80ccd_1b": 50000,    # Additional NPS
+        "section_80e": None,          # Education Loan (No limit)
+        "section_80g": None,          # Charitable Donations
+        "section_80tta": 10000,       # Savings Interest
+        "section_80ttb": 50000,       # Senior Citizen Interest
+        "section_24b": 200000,        # Home Loan Interest
+        "section_80ee": 150000,       # First-time Homebuyer
+        "section_80gg": 60000,        # Rent (no HRA)
+        "hra": None                   # HRA (based on calculation)
+    }
+    
     def calculate_old_regime(self, income_data: Dict) -> float:
         """
         Calculate tax under Old Regime
@@ -110,13 +127,17 @@ class TaxCalculator:
             # Calculate total deductions (Chapter VI-A and others)
             total_deductions = (
                 safe_float(deductions.get("section_80c", 0)) +
+                safe_float(deductions.get("section_80ccd_1", 0)) +
                 safe_float(deductions.get("section_80d", 0)) +
                 safe_float(deductions.get("section_80ccd_1b", 0)) +
+                safe_float(deductions.get("section_80e", 0)) +
                 safe_float(deductions.get("section_80g", 0)) +
                 safe_float(deductions.get("section_80tta", 0)) +
                 safe_float(deductions.get("section_80ttb", 0)) +
                 hra_exemption +
-                safe_float(deductions.get("section_24b", 0)) +  # Home loan interest
+                safe_float(deductions.get("section_24b", 0)) +
+                safe_float(deductions.get("section_80ee", 0)) +
+                safe_float(deductions.get("section_80gg", 0)) +
                 safe_float(deductions.get("other_deductions", 0))
             )
             
@@ -287,13 +308,17 @@ class TaxCalculator:
             
             total_deductions = (
                 safe_float(deductions.get("section_80c", 0)) +
+                safe_float(deductions.get("section_80ccd_1", 0)) +
                 safe_float(deductions.get("section_80d", 0)) +
                 safe_float(deductions.get("section_80ccd_1b", 0)) +
+                safe_float(deductions.get("section_80e", 0)) +
                 safe_float(deductions.get("section_80g", 0)) +
                 safe_float(deductions.get("section_80tta", 0)) +
                 safe_float(deductions.get("section_80ttb", 0)) +
                 hra_exemption +
                 safe_float(deductions.get("section_24b", 0)) +
+                safe_float(deductions.get("section_80ee", 0)) +
+                safe_float(deductions.get("section_80gg", 0)) +
                 safe_float(deductions.get("other_deductions", 0)) +
                 safe_float(deductions.get("standard_deduction", self.STANDARD_DEDUCTION))
             )

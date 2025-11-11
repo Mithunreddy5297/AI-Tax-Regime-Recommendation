@@ -1,5 +1,52 @@
 {
   "sections": {
+    "salary_components": {
+      "title": "Salary Components (From Form 16)",
+      "description": "Components of salary as mentioned in Form 16",
+      "components": [
+        "Basic Salary",
+        "Dearness Allowance (DA)",
+        "House Rent Allowance (HRA)",
+        "Medical Allowance",
+        "Conveyance Allowance",
+        "Special Allowance",
+        "Other Allowances",
+        "Perquisites",
+        "Profits in lieu of Salary"
+      ],
+      "note": "Form 16 Part A contains all these details"
+    },
+    "tds_details": {
+      "title": "Tax Deducted at Source (TDS)",
+      "description": "TDS deducted by employer on salary",
+      "components": [
+        "Monthly TDS deductions",
+        "Advance tax paid",
+        "TDS on other income (if any)"
+      ],
+      "note": "Form 16 Part B shows month-wise TDS breakdown"
+    },
+    "standard_deduction": {
+      "title": "Standard Deduction",
+      "description": "Fixed deduction available to salaried employees",
+      "limits": {
+        "old_regime": 50000,
+        "new_regime": 50000
+      },
+      "legal_reference": "Income Tax Act, 1961"
+    },
+    "HRA": {
+      "title": "Section 10(13A) - House Rent Allowance",
+      "description": "Exemption for House Rent Allowance",
+      "calculation": "Minimum of: (1) Actual HRA received, (2) Actual rent paid - 10% of basic salary, (3) 50% of basic (metro) or 40% (non-metro)",
+      "requirements": [
+        "Valid rent receipts",
+        "Rental agreement",
+        "PAN of landlord (if rent > ₹1,00,000 per annum)"
+      ],
+      "form16_display": "Shown separately if claimed",
+      "legal_reference": "Income Tax Act, 1961 - Section 10(13A)"
+    },
     "80C": {
       "title": "Section 80C - Deduction for investments",
       "description": "Deduction up to ₹1,50,000 for investments in specified instruments",
@@ -11,9 +58,11 @@
         "Life Insurance Premium",
         "Principal repayment of home loan",
         "Sukanya Samriddhi Yojana",
-        "Senior Citizens Savings Scheme"
+        "Senior Citizens Savings Scheme",
+        "Stamp duty and registration fees for property"
       ],
       "max_limit": 150000,
+      "form16_display": "Claimed in Annexure - Schedule (as per Form 16 Part A)",
       "legal_reference": "Income Tax Act, 1961 - Section 80C"
     },
     "80D": {
@@ -21,43 +70,127 @@
       "description": "Deduction for health insurance premium paid",
       "limits": {
         "self_family": 25000,
-        "senior_citizen": 50000,
+        "senior_citizen_self": 50000,
         "parents": 25000,
-        "senior_citizen_parents": 50000
+        "senior_citizen_parents": 50000,
+        "both_regular_senior": 75000
       },
+      "form16_display": "Claimed separately with premium proof",
       "legal_reference": "Income Tax Act, 1961 - Section 80D"
+    },
+    "80CCD_1": {
+      "title": "Section 80CCD(1) - Employee Contribution to NPS",
+      "description": "Contribution to National Pension System (Employee contribution)",
+      "limits": {
+        "percentage_of_salary": 0.10,
+        "note": "Up to 10% of salary or ₹1.5 Lakh under Section 80C (whichever is lower)"
+      },
+      "form16_display": "Shown as Part of Section 80C limit",
+      "legal_reference": "Income Tax Act, 1961 - Section 80CCD(1)"
     },
     "80CCD_1B": {
       "title": "Section 80CCD(1B) - Additional NPS Contribution",
-      "description": "Additional deduction of up to ₹50,000 for NPS contribution (over and above Section 80C)",
+      "description": "Additional deduction for NPS contribution (over and above Section 80C)",
       "max_limit": 50000,
+      "form16_display": "Claimed separately beyond 80C limit",
       "legal_reference": "Income Tax Act, 1961 - Section 80CCD(1B)"
     },
-    "HRA": {
-      "title": "Section 10(13A) - House Rent Allowance",
-      "description": "Exemption for House Rent Allowance",
-      "calculation": "Minimum of: (1) Actual HRA received, (2) Actual rent paid - 10% of basic salary, (3) 50% of basic (metro) or 40% (non-metro)",
-      "requirements": [
-        "Valid rent receipts",
-        "Rental agreement",
-        "PAN of landlord (if rent > ₹1,00,000 per annum)"
+    "80E": {
+      "title": "Section 80E - Education Loan Interest",
+      "description": "Deduction for interest paid on education loan",
+      "max_limit": null,
+      "note": "Entire amount of interest paid (no upper limit)",
+      "eligible": [
+        "Student pursuing higher education",
+        "Loan taken from bank or approved financial institution"
       ],
-      "legal_reference": "Income Tax Act, 1961 - Section 10(13A)"
+      "form16_display": "Claimed with loan document proof",
+      "legal_reference": "Income Tax Act, 1961 - Section 80E"
+    },
+    "80G": {
+      "title": "Section 80G - Charitable Donations",
+      "description": "Deduction for donations to approved charities",
+      "limits": {
+        "approved_charities_50": 0.50,
+        "approved_charities_100": 1.0
+      },
+      "note": "50% or 100% deduction depending on charity type",
+      "form16_display": "Claimed with donation receipt",
+      "legal_reference": "Income Tax Act, 1961 - Section 80G"
+    },
+    "80TTA": {
+      "title": "Section 80TTA - Savings Account Interest",
+      "description": "Deduction for interest from savings account",
+      "max_limit": 10000,
+      "eligible": [
+        "Individual having savings account with bank/post office"
+      ],
+      "form16_display": "Claimed if applicable",
+      "legal_reference": "Income Tax Act, 1961 - Section 80TTA"
+    },
+    "80TTB": {
+      "title": "Section 80TTB - Senior Citizen Interest Income",
+      "description": "Deduction for interest income for senior citizens (60+ years)",
+      "max_limit": 50000,
+      "eligible": [
+        "Resident individual aged 60 years or above",
+        "Income from deposits in bank/financial institution"
+      ],
+      "form16_display": "Claimed if applicable",
+      "legal_reference": "Income Tax Act, 1961 - Section 80TTB"
+    },
+    "24B": {
+      "title": "Section 24B - Home Loan Interest",
+      "description": "Deduction for interest on home loan",
+      "max_limit": 200000,
+      "note": "₹2,00,000 for self-occupied property or ₹30,000 for let-out property",
+      "eligible": [
+        "Interest on loan taken for acquiring/constructing property",
+        "Pre-EMI interest during construction period"
+      ],
+      "form16_display": "Claimed with Form 12BA from bank",
+      "legal_reference": "Income Tax Act, 1961 - Section 24B"
+    },
+    "80EE": {
+      "title": "Section 80EE - First-time Homebuyer",
+      "description": "Additional deduction for first-time homebuyers",
+      "max_limit": 150000,
+      "note": "Additional to Section 24B deduction",
+      "eligible": [
+        "First-time homebuyer",
+        "Loan amount up to ₹35 Lakh",
+        "Property cost up to ₹50 Lakh"
+      ],
+      "form16_display": "Claimed with proof documents",
+      "legal_reference": "Income Tax Act, 1961 - Section 80EE"
+    },
+    "80GG": {
+      "title": "Section 80GG - Rent Paid (Without HRA)",
+      "description": "Deduction for rent paid when not receiving HRA",
+      "calculation": "Lowest of: (1) Rent paid - 10% of total income, (2) 25% of total income, (3) ₹5,000 per month",
+      "requirements": [
+        "Not receiving any HRA",
+        "Rent agreement and receipts"
+      ],
+      "form16_display": "Claimed when HRA not provided",
+      "legal_reference": "Income Tax Act, 1961 - Section 80GG"
     }
   },
   "regimes": {
     "old": {
-      "description": "Old Tax Regime with deductions",
+      "description": "Old Tax Regime with full deductions (FY 2023-24)",
       "slabs": [
         {"min": 0, "max": 250000, "rate": 0},
         {"min": 250000, "max": 500000, "rate": 0.05},
         {"min": 500000, "max": 1000000, "rate": 0.20},
         {"min": 1000000, "max": null, "rate": 0.30}
       ],
-      "deductions_allowed": true
+      "deductions_allowed": true,
+      "standard_deduction": 50000,
+      "description_detailed": "All Section 80 deductions are allowed. Best for those with significant deductions."
     },
     "new": {
-      "description": "New Tax Regime with lower rates",
+      "description": "New Tax Regime with lower rates (FY 2023-24)",
       "slabs": [
         {"min": 0, "max": 300000, "rate": 0},
         {"min": 300000, "max": 700000, "rate": 0.05},
@@ -67,15 +200,35 @@
         {"min": 1500000, "max": null, "rate": 0.30}
       ],
       "deductions_allowed": false,
-      "standard_deduction": 50000
+      "standard_deduction": 50000,
+      "description_detailed": "No Section 80 deductions allowed. Only standard deduction. Best for those with minimal deductions."
     }
   },
+  "form16_information": {
+    "description": "What is Form 16?",
+    "full_name": "Certificate of Tax Deducted at Source",
+    "validity": "Issued by employer to employee for salary income",
+    "issued_by": "Employer/Tax Deducted at Source",
+    "issued_date": "Before May 31st of the following financial year",
+    "parts": {
+      "part_a": "Details of salary, TDS deductions, and deductions claimed",
+      "part_b": "Month-wise TDS breakdown"
+    },
+    "use": "Required for filing Income Tax Return (ITR)"
+  },
   "tips": [
+    "Form 16 contains all details needed for ITR filing",
+    "Compare Old vs New regime using your Form 16 data",
     "Maximize Section 80C investments before March 31st",
     "Health insurance premium should be paid before the financial year ends",
-    "Keep proper documentation for all deductions",
-    "Review your regime choice annually based on your deductions",
-    "NPS contribution under 80CCD(1B) is in addition to 80C limit"
+    "Keep proper documentation for all deductions claimed in Form 16",
+    "Review your regime choice annually based on your total deductions",
+    "NPS contribution under 80CCD(1B) is in addition to 80C limit",
+    "HRA exemption requires rent receipts and rental agreement",
+    "Home loan interest deduction requires Form 12BA from lender",
+    "First-time homebuyers can claim additional deduction under 80EE",
+    "If no HRA provided, claim rent deduction under Section 80GG",
+    "Education loan interest deduction has no upper limit under 80E"
   ]
 }
 

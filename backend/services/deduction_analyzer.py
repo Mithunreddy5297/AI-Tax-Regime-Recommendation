@@ -12,15 +12,19 @@ class DeductionAnalyzer:
     
     # Maximum limits for deductions (FY 2023-24)
     MAX_LIMITS = {
-        "section_80c": 150000,  # Rs. 1.5 Lakh
-        "section_80d": 25000,   # Rs. 25,000 (self + family)
-        "section_80d_senior": 50000,  # Rs. 50,000 (if senior citizen)
-        "section_80ccd_1b": 50000,  # Rs. 50,000 (NPS additional)
-        "section_80g": None,  # 50% or 100% of donation (varies)
-        "section_80tta": 10000,  # Rs. 10,000 (interest from savings)
-        "section_80ttb": 50000,  # Rs. 50,000 (senior citizens - interest income)
-        "section_24b": 200000,  # Rs. 2 Lakh (home loan interest)
-        "hra": None  # HRA depends on salary, rent, and location
+        "section_80c": 150000,        # Rs. 1.5 Lakh - Investments
+        "section_80ccd_1": 150000,    # Rs. 1.5 Lakh - NPS (counted in 80C)
+        "section_80d": 25000,         # Rs. 25,000 - Health Insurance (self + family)
+        "section_80d_senior": 50000,  # Rs. 50,000 - Health Insurance (senior citizen)
+        "section_80ccd_1b": 50000,    # Rs. 50,000 - NPS additional
+        "section_80e": None,          # No limit - Education Loan Interest
+        "section_80g": None,          # 50% or 100% - Charitable Donations
+        "section_80tta": 10000,       # Rs. 10,000 - Savings Account Interest
+        "section_80ttb": 50000,       # Rs. 50,000 - Senior Citizen Interest
+        "section_24b": 200000,        # Rs. 2 Lakh - Home Loan Interest
+        "section_80ee": 150000,       # Rs. 1.5 Lakh - First-time Homebuyer
+        "section_80gg": 60000,        # Rs. 60,000 (5000 x 12) - Rent (no HRA)
+        "hra": None                   # HRA depends on salary, rent, and location
     }
     
     def analyze_deductions(self, income_data: Dict) -> Dict:
@@ -118,6 +122,70 @@ class DeductionAnalyzer:
                     "potential_tax_saving": hra_analysis.get("unclaimed_amount", 0) * 0.30
                 })
             
+            # Analyze Section 80E - Education Loan Interest
+            sec80e_claimed = deductions.get("section_80e", 0)
+            if sec80e_claimed > 0:
+                analysis["claimed_deductions"]["section_80e"] = {
+                    "claimed": sec80e_claimed,
+                    "max_limit": "No limit",
+                    "available": 0,
+                    "note": "No upper limit on education loan interest deduction"
+                }
+            
+            # Analyze Section 80G - Charitable Donations
+            sec80g_claimed = deductions.get("section_80g", 0)
+            if sec80g_claimed > 0:
+                analysis["claimed_deductions"]["section_80g"] = {
+                    "claimed": sec80g_claimed,
+                    "note": "50% or 100% deduction based on charity type"
+                }
+            
+            # Analyze Section 24B - Home Loan Interest
+            sec24b_claimed = deductions.get("section_24b", 0)
+            sec24b_max = self.MAX_LIMITS["section_24b"]
+            sec24b_available = max(0, sec24b_max - sec24b_claimed)
+            
+            analysis["claimed_deductions"]["section_24b"] = {
+                "claimed": sec24b_claimed,
+                "max_limit": sec24b_max,
+                "available": sec24b_available,
+                "utilization_percent": (sec24b_claimed / sec24b_max * 100) if sec24b_max > 0 else 0
+            }
+            
+            if sec24b_available > 0:
+                analysis["unclaimed_opportunities"].append({
+                    "section": "24B",
+                    "description": "Home Loan Interest Deduction - Get Form 12BA from your lender",
+                    "available_amount": sec24b_available,
+                    "potential_tax_saving": sec24b_available * 0.30
+                })
+            
+            # Analyze Section 80EE - First-time Homebuyer
+            sec80ee_claimed = deductions.get("section_80ee", 0)
+            sec80ee_max = self.MAX_LIMITS["section_80ee"]
+            sec80ee_available = max(0, sec80ee_max - sec80ee_claimed)
+            
+            if sec80ee_available > 0:
+                analysis["unclaimed_opportunities"].append({
+                    "section": "80EE",
+                    "description": "First-time Homebuyer Additional Deduction - Up to ₹1.5 Lakh (beyond 24B)",
+                    "available_amount": sec80ee_available,
+                    "potential_tax_saving": sec80ee_available * 0.30
+                })
+            
+            # Analyze Section 80GG - Rent (no HRA)
+            sec80gg_claimed = deductions.get("section_80gg", 0)
+            sec80gg_max = self.MAX_LIMITS["section_80gg"]
+            sec80gg_available = max(0, sec80gg_max - sec80gg_claimed)
+            
+            if sec80gg_available > 0 and hra_claimed == 0:
+                analysis["unclaimed_opportunities"].append({
+                    "section": "80GG",
+                    "description": "Rent Deduction (when HRA not received) - Lowest of: Rent-10% income, 25% income, ₹5000/month",
+                    "available_amount": sec80gg_available,
+                    "potential_tax_saving": sec80gg_available * 0.30
+                })
+            
             # Calculate total potential savings
             analysis["potential_savings"] = sum(
                 opp.get("potential_tax_saving", 0) 
@@ -194,6 +262,24 @@ class DeductionAnalyzer:
                 recommendations.append(
                     f"Review your HRA claim. You may be eligible for additional ₹{available:,.0f} deduction. "
                     f"Ensure you have proper rent receipts and rental agreement."
+                )
+            
+            if section == "24B" and available > 0:
+                recommendations.append(
+                    f"Claim home loan interest deduction of up to ₹{available:,.0f} under Section 24B. "
+                    f"This can save up to ₹{saving:,.0f} in taxes. Get Form 12BA from your lender."
+                )
+            
+            if section == "80EE" and available > 0:
+                recommendations.append(
+                    f"As a first-time homebuyer, claim additional deduction of ₹{available:,.0f} under Section 80EE "
+                    f"to save up to ₹{saving:,.0f} in taxes."
+                )
+            
+            if section == "80GG" and available > 0:
+                recommendations.append(
+                    f"Since you're not receiving HRA, claim rent deduction of up to ₹{available:,.0f} under Section 80GG. "
+                    f"Keep rent receipts and agreement for proof."
                 )
         
         return recommendations
